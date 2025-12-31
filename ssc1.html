@@ -1,0 +1,572 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>25-Question Single-View Exam</title>
+    <style>
+        /* --- CSS Styling --- */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f7f9;
+            margin: 0;
+            padding: 20px;
+            color: #333;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            min-height: 100vh;
+        }
+
+        .exam-container {
+            width: 100%;
+            max-width: 700px;
+            background-color: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            color: #007bff;
+            text-align: center;
+            margin-bottom: 25px;
+        }
+
+        /* Question Blocks - Only one is visible at a time */
+        .question-block {
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            margin-bottom: 20px;
+            display: none; /* KEY: Hide all questions by default */
+        }
+
+        .question-block.active {
+            display: block; /* KEY: Show only the active question */
+        }
+
+        .question-text {
+            font-size: 1.2em;
+            margin-bottom: 15px;
+            font-weight: bold;
+        }
+
+        .options label {
+            display: block;
+            background-color: #f8f9fa;
+            padding: 12px;
+            margin: 8px 0;
+            border-radius: 4px;
+            cursor: pointer;
+            border: 1px solid #dee2e6;
+            transition: background-color 0.2s;
+        }
+
+        .options label:hover {
+            background-color: #e9ecef;
+        }
+
+        .options input[type="radio"] {
+            margin-right: 10px;
+        }
+        
+        /* Navigation and Buttons */
+        .navigation {
+            text-align: right;
+            margin-top: 20px;
+        }
+
+        .nav-button {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            font-size: 1em;
+            cursor: pointer;
+            margin-left: 10px;
+            transition: background-color 0.2s;
+        }
+
+        #nextButton {
+            background-color: #007bff;
+            color: white;
+        }
+
+        #nextButton:hover {
+            background-color: #0056b3;
+        }
+
+        #submitButton {
+            background-color: #28a745;
+            color: white;
+            display: none; /* Initially hidden */
+        }
+
+        #submitButton:hover {
+            background-color: #1e7e34;
+        }
+
+        /* Results Screen */
+        #resultsScreen {
+            text-align: center;
+            padding: 40px;
+            background-color: #e9f7ff;
+            border-radius: 8px;
+            border: 2px solid #007bff;
+            display: none;
+        }
+        
+        .final-score {
+            font-size: 3em;
+            color: #28a745;
+            font-weight: bold;
+            display: block;
+            margin: 10px 0;
+        }
+
+        #timer-box {
+            background-color: #d9534f; /* Red background for urgency */
+            color: white;
+            padding: 15px 30px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        #timer-box h3 {
+            margin: 0 0 5px 0;
+            font-size: 1.2em;
+        }
+
+        #countdown {
+            font-size: 2.5em;
+            font-weight: bold;
+        }
+
+        .exam-content {
+            width: 80%;
+            max-width: 600px;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            background-color: #fff;
+        } 
+
+
+    </style>
+</head>
+<body>
+
+    <div class="exam-container">
+
+        <div id="timer-box">
+            <h3>Time Remaining</h3>
+            <div id="countdown">60:00</div>
+        </div>
+    
+       
+
+        <h1>Online Practice Exam</h1>
+        
+        <form id="quizForm">
+            <div id="q1" class="question-block active">
+                <div class="question-text">Q. 1 19 is related to 209 following a certain logic. 27 is related to 297 using the same logic. To which of the following is 61 related?</div>
+                <div class="options">
+                    <label><input type="radio" name="q1_answer" value="A"> 653</label>
+                    <label><input type="radio" name="q1_answer" value="B"> 671</label>
+                    <label><input type="radio" name="q1_answer" value="C"> 571</label>
+                    <label><input type="radio" name="q1_answer" value="D"> 600</label>
+                </div>
+            </div>
+
+            <div id="q2" class="question-block">
+                <div class="question-text">Q. 2 31 is related to 152 by certain logic. 47 is related to 168 using the same logic. To which of the following is 66 related?</div>
+                <div class="options">
+                    <label><input type="radio" name="q2_answer" value="A"> 180</label>
+                    <label><input type="radio" name="q2_answer" value="B"> 190</label>
+                    <label><input type="radio" name="q2_answer" value="C"> 185</label>
+                    <label><input type="radio" name="q2_answer" value="D"> 187</label>
+                </div>
+            </div>
+
+            <div id="q3" class="question-block">
+                <div class="question-text">Q. 3 In a certain code language, ‘NAME’ is written as ‘FNBO’ and ‘NANO’ is written as ‘POBO’. How will ‘NAIL’ be written in that language?</div>
+                <div class="options">
+                    <label><input type="radio" name="q3_answer" value="A"> MJOB</label>
+                    <label><input type="radio" name="q3_answer" value="B"> MJOB</label>
+                    <label><input type="radio" name="q3_answer" value="C"> MJOB</label>
+                    <label><input type="radio" name="q3_answer" value="D"> MOBJ</label>
+                </div>
+            </div>
+            <div id="q4" class="question-block">
+                <div class="question-text">Q. 4 In a certain code language, ‘A + B’ means ‘A is the mother of B’, ‘A – B’ means ‘A is the father of B’, ‘A $ B’ means ‘A is the son of B’, ‘A % B’ means ‘A is the sister of B’, ‘A / B’ means ‘A is the wife of B’, and ‘A = B’ means ‘A is the brother of B’. Which of the following means A is the daughter of K?</div>
+                <div class="options">
+                    <label><input type="radio" name="q4_answer" value="A"> A + K / J – P = D</label>
+                    <label><input type="radio" name="q4_answer" value="B"> J % P = K + A = D</label>
+                    <label><input type="radio" name="q4_answer" value="C"> K + A / P – D % J</label>
+                    <label><input type="radio" name="q4_answer" value="D"> D + K = A / P – J</label>
+                </div>
+            </div>
+            <div id="q5" class="question-block">
+                <div class="question-text">Q. 5 In a certain code language, ‘what where how’ is written as ‘aa dd ff’; ‘where there that’ is written as ‘dd zz pp’; ‘which what here’ is written as ‘ff kk ll’. How is ‘how’ written in that language?</div>
+                <div class="options">
+                    <label><input type="radio" name="q5_answer" value="A"> kk</label>
+                    <label><input type="radio" name="q5_answer" value="B"> aa</label>
+                    <label><input type="radio" name="q5_answer" value="C"> ff</label>
+                    <label><input type="radio" name="q5_answer" value="D"> zz</label>
+                </div>
+            </div>
+            <div id="q6" class="question-block">
+                <div class="question-text"></div>
+                <div class="options">
+                    <label><input type="radio" name="q5_answer" value="A"> </label>
+                    <label><input type="radio" name="q5_answer" value="B"> </label>
+                    <label><input type="radio" name="q5_answer" value="C"> </label>
+                    <label><input type="radio" name="q5_answer" value="D"> </label>
+                </div>
+            </div>
+            <div id="q7" class="question-block">
+                <div class="question-text"></div>
+                <div class="options">
+                    <label><input type="radio" name="q5_answer" value="A"> </label>
+                    <label><input type="radio" name="q5_answer" value="B"> </label>
+                    <label><input type="radio" name="q5_answer" value="C"> </label>
+                    <label><input type="radio" name="q5_answer" value="D"> </label>
+                </div>
+            </div>
+            <div id="q8" class="question-block">
+                <div class="question-text"></div>
+                <div class="options">
+                    <label><input type="radio" name="q5_answer" value="A"> </label>
+                    <label><input type="radio" name="q5_answer" value="B"> </label>
+                    <label><input type="radio" name="q5_answer" value="C"> </label>
+                    <label><input type="radio" name="q5_answer" value="D"> </label>
+                </div>
+            </div>
+            <div id="q9" class="question-block">
+                <div class="question-text"></div>
+                <div class="options">
+                    <label><input type="radio" name="q5_answer" value="A"> </label>
+                    <label><input type="radio" name="q5_answer" value="B"> </label>
+                    <label><input type="radio" name="q5_answer" value="C"> </label>
+                    <label><input type="radio" name="q5_answer" value="D"> </label>
+                </div>
+            </div>
+            <div id="q10" class="question-block">
+                <div class="question-text"></div>
+                <div class="options">
+                    <label><input type="radio" name="q5_answer" value="A"> </label>
+                    <label><input type="radio" name="q5_answer" value="B"> </label>
+                    <label><input type="radio" name="q5_answer" value="C"> </label>
+                    <label><input type="radio" name="q5_answer" value="D"> </label>
+                </div>
+            </div>
+            <div id="q11" class="question-block">
+                <div class="question-text"></div>
+                <div class="options">
+                    <label><input type="radio" name="q5_answer" value="A"> </label>
+                    <label><input type="radio" name="q5_answer" value="B"> </label>
+                    <label><input type="radio" name="q5_answer" value="C"> </label>
+                    <label><input type="radio" name="q5_answer" value="D"> </label>
+                </div>
+            </div>
+            <div id="q12" class="question-block">
+                <div class="question-text"></div>
+                <div class="options">
+                    <label><input type="radio" name="q5_answer" value="A"> </label>
+                    <label><input type="radio" name="q5_answer" value="B"> </label>
+                    <label><input type="radio" name="q5_answer" value="C"> </label>
+                    <label><input type="radio" name="q5_answer" value="D"> </label>
+                </div>
+            </div>
+            <div id="q13" class="question-block">
+                <div class="question-text"></div>
+                <div class="options">
+                    <label><input type="radio" name="q5_answer" value="A"> </label>
+                    <label><input type="radio" name="q5_answer" value="B"> </label>
+                    <label><input type="radio" name="q5_answer" value="C"> </label>
+                    <label><input type="radio" name="q5_answer" value="D"> </label>
+                </div>
+            </div>
+            <div id="q14" class="question-block">
+                <div class="question-text"></div>
+                <div class="options">
+                    <label><input type="radio" name="q5_answer" value="A"> </label>
+                    <label><input type="radio" name="q5_answer" value="B"> </label>
+                    <label><input type="radio" name="q5_answer" value="C"> </label>
+                    <label><input type="radio" name="q5_answer" value="D"> </label>
+                </div>
+            </div>
+            <div id="q15" class="question-block">
+                <div class="question-text"></div>
+                <div class="options">
+                    <label><input type="radio" name="q5_answer" value="A"> </label>
+                    <label><input type="radio" name="q5_answer" value="B"> </label>
+                    <label><input type="radio" name="q5_answer" value="C"> </label>
+                    <label><input type="radio" name="q5_answer" value="D"> </label>
+                </div>
+            </div>
+            <div id="q16" class="question-block">
+                <div class="question-text"></div>
+                <div class="options">
+                    <label><input type="radio" name="q5_answer" value="A"> </label>
+                    <label><input type="radio" name="q5_answer" value="B"> </label>
+                    <label><input type="radio" name="q5_answer" value="C"> </label>
+                    <label><input type="radio" name="q5_answer" value="D"> </label>
+                </div>
+            </div>
+            <div id="q17" class="question-block">
+                <div class="question-text"></div>
+                <div class="options">
+                    <label><input type="radio" name="q5_answer" value="A"> </label>
+                    <label><input type="radio" name="q5_answer" value="B"> </label>
+                    <label><input type="radio" name="q5_answer" value="C"> </label>
+                    <label><input type="radio" name="q5_answer" value="D"> </label>
+                </div>
+            </div>
+            <div id="q18" class="question-block">
+                <div class="question-text"></div>
+                <div class="options">
+                    <label><input type="radio" name="q5_answer" value="A"> </label>
+                    <label><input type="radio" name="q5_answer" value="B"> </label>
+                    <label><input type="radio" name="q5_answer" value="C"> </label>
+                    <label><input type="radio" name="q5_answer" value="D"> </label>
+                </div>
+            </div>
+            <div id="q19" class="question-block">
+                <div class="question-text"></div>
+                <div class="options">
+                    <label><input type="radio" name="q5_answer" value="A"> </label>
+                    <label><input type="radio" name="q5_answer" value="B"> </label>
+                    <label><input type="radio" name="q5_answer" value="C"> </label>
+                    <label><input type="radio" name="q5_answer" value="D"> </label>
+                </div>
+            </div>
+            <div id="q20" class="question-block">
+                <div class="question-text"></div>
+                <div class="options">
+                    <label><input type="radio" name="q5_answer" value="A"> </label>
+                    <label><input type="radio" name="q5_answer" value="B"> </label>
+                    <label><input type="radio" name="q5_answer" value="C"> </label>
+                    <label><input type="radio" name="q5_answer" value="D"> </label>
+                </div>
+            </div>
+            <div id="q21" class="question-block">
+                <div class="question-text"></div>
+                <div class="options">
+                    <label><input type="radio" name="q5_answer" value="A"> </label>
+                    <label><input type="radio" name="q5_answer" value="B"> </label>
+                    <label><input type="radio" name="q5_answer" value="C"> </label>
+                    <label><input type="radio" name="q5_answer" value="D"> </label>
+                </div>
+            </div>
+            <div id="q22" class="question-block">
+                <div class="question-text"></div>
+                <div class="options">
+                    <label><input type="radio" name="q5_answer" value="A"> </label>
+                    <label><input type="radio" name="q5_answer" value="B"> </label>
+                    <label><input type="radio" name="q5_answer" value="C"> </label>
+                    <label><input type="radio" name="q5_answer" value="D"> </label>
+                </div>
+            </div>
+            <div id="q23" class="question-block">
+                <div class="question-text"></div>
+                <div class="options">
+                    <label><input type="radio" name="q5_answer" value="A"> </label>
+                    <label><input type="radio" name="q5_answer" value="B"> </label>
+                    <label><input type="radio" name="q5_answer" value="C"> </label>
+                    <label><input type="radio" name="q5_answer" value="D"> </label>
+                </div>
+            </div>
+            <div id="q24" class="question-block">
+                <div class="question-text"></div>
+                <div class="options">
+                    <label><input type="radio" name="q5_answer" value="A"> </label>
+                    <label><input type="radio" name="q5_answer" value="B"> </label>
+                    <label><input type="radio" name="q5_answer" value="C"> </label>
+                    <label><input type="radio" name="q5_answer" value="D"> </label>
+                </div>
+            </div>
+            
+            <div id="q25" class="question-block">
+                <div class="question-text">25. What is the approximate value of the number $e$ (Euler's number) to two decimal places?</div>
+                <div class="options">
+                    <label><input type="radio" name="q25_answer" value="A"> 3.14</label>
+                    <label><input type="radio" name="q25_answer" value="B"> 2.72</label>
+                    <label><input type="radio" name="q25_answer" value="C"> 1.61</label>
+                    <label><input type="radio" name="q25_answer" value="D"> 4.00</label>
+                </div>
+            </div>
+
+            <div class="navigation">
+                <span id="questionCounter">Question 1 of 25</span>
+                <button type="button" id="nextButton" class="nav-button">Next Question</button>
+                <button type="button" id="submitButton" class="nav-button">Submit Exam</button>
+            </div>
+        </form>
+        
+        <div id="resultsScreen">
+            <h2>Exam Completed!</h2>
+            <p>Your Final Score is:</p>
+            <span class="final-score" id="finalScoreDisplay"></span>
+            <p>Thank you for taking the test.</p>
+        </div>
+    </div>
+
+    <script>
+        const quizForm = document.getElementById('quizForm');
+        const nextButton = document.getElementById('nextButton');
+        const submitButton = document.getElementById('submitButton');
+        const resultsScreen = document.getElementById('resultsScreen');
+        const questionCounter = document.getElementById('questionCounter');
+        
+        // List of all question elements
+        const questions = document.querySelectorAll('.question-block');
+        const totalQuestions = questions.length;
+        let currentQuestionIndex = 0;
+
+        // Define the correct answers for grading (Server-side in a real app)
+        const correctAnswers = {
+            'q1_answer': 'C',  // Paris
+            'q2_answer': 'C',  // 7
+            'q3_answer': 'A',  // 45
+            'q4_answer': 'B',  // Mars
+            'q5_answer': 'C',  // Shakespeare
+            'q6_answer': 'B',  // H2O
+            'q7_answer': 'D',  // Pacific
+            'q8_answer': 'C',  // 8
+            'q9_answer': 'B',  // Nile
+            'q10_answer': 'A', // Hyper Text Markup Language
+            'q11_answer': 'B', // Mitochondria
+            'q12_answer': 'C', // Yen
+            'q13_answer': 'C', // 2
+            'q14_answer': 'C', // Carbon Dioxide
+            'q15_answer': 'C', // Egypt
+            'q16_answer': 'C', // 300,000 km/s
+            'q17_answer': 'B', // Brain
+            'q18_answer': 'C', // Ohm
+            'q19_answer': 'D', // CSS
+            'q20_answer': 'B', // Evaporation
+            'q21_answer': 'C', // Da Vinci
+            'q22_answer': 'B', // Nitrogen
+            'q23_answer': 'B', // 1969
+            'q24_answer': 'C', // 30
+            'q25_answer': 'B'  // 2.72
+        };
+
+        // --- Core Functions ---
+
+        function displayQuestion(index) {
+            // 1. Hide all questions
+            questions.forEach(q => q.classList.remove('active'));
+            
+            // 2. Show the current question
+            questions[index].classList.add('active');
+            
+            // 3. Update the counter text
+            questionCounter.textContent = `Question ${index + 1} of ${totalQuestions}`;
+
+            // 4. Update button visibility
+            if (index === totalQuestions - 1) {
+                // If it's the last question
+                nextButton.style.display = 'none';
+                submitButton.style.display = 'inline-block';
+            } else {
+                // Not the last question
+                nextButton.style.display = 'inline-block';
+                submitButton.style.display = 'none';
+            }
+        }
+
+        function handleNext() {
+            if (currentQuestionIndex < totalQuestions - 1) {
+                currentQuestionIndex++;
+                displayQuestion(currentQuestionIndex);
+            }
+        }
+
+        function handleSubmit(event) {
+            event.preventDefault(); // Stop the form from submitting normally
+            let score = 0;
+            const formData = new FormData(quizForm);
+
+            // Loop through all questions and check answers
+            for (const [name, value] of formData.entries()) {
+                if (correctAnswers[name] && correctAnswers[name] === value) {
+                    score++;
+                }
+            }
+
+            // Display results
+            quizForm.style.display = 'none';
+            resultsScreen.style.display = 'block';
+            document.getElementById('finalScoreDisplay').textContent = `${score} / ${totalQuestions}`;
+        }
+
+        // --- Event Listeners ---
+        
+        nextButton.addEventListener('click', handleNext);
+        submitButton.addEventListener('click', handleSubmit);
+
+        // --- Initialization ---
+        
+        // Start by displaying the first question
+        displayQuestion(currentQuestionIndex);
+
+         // --- JAVASCRIPT LOGIC ---
+
+        // Set the initial time in seconds (e.g., 5 minutes = 300 seconds)
+        let totalSeconds = 3600; 
+        const countdownDisplay = document.getElementById('countdown');
+        let timerInterval;
+
+        // Function to format the time (e.g., 5 -> 05)
+        function formatTime(val) {
+            return val < 10 ? "0" + val : val;
+        }
+
+        // Function to update the countdown display
+        function updateCountdown() {
+            // Check if time is up
+            if (totalSeconds <= 0) {
+                clearInterval(timerInterval); // Stop the timer
+                countdownDisplay.textContent = "00:00";
+                
+                // CRITICAL: Action to take when time runs out
+                // In a real exam, this would automatically submit the form
+                alert("Time is up! Your answers will be automatically submitted.");
+                
+                // You would add submission code here, e.g.:
+                // document.getElementById('examForm').submit();
+                return; 
+            }
+
+            // Calculate minutes and seconds
+            const minutes = formatTime(Math.floor(totalSeconds / 60));
+            const seconds = formatTime(totalSeconds % 60);
+
+            // Update the display element
+            countdownDisplay.textContent = `${minutes}:${seconds}`;
+
+            // Decrease the total seconds
+            totalSeconds--;
+        }
+
+        // 1. Start the timer immediately when the page loads
+        // The setInterval function calls updateCountdown every 1000ms (1 second)
+        function startTimer() {
+            // Call the function once immediately to show the initial time
+            updateCountdown(); 
+            // Then set the interval
+            timerInterval = setInterval(updateCountdown, 1000);
+        }
+
+        // Call the function to start the timer
+        startTimer();
+
+
+    </script>
+
+</body>
+</html>
